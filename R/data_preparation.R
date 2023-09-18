@@ -580,7 +580,9 @@ data_preparation_R <- function(min_data,
 # although in latest data dates seem to consistently be in YMD.
 parse_date_if_needed <- function(x, orders = c("ymd", "dmy")) {
   if (lubridate::is.Date(x)) {
-    x
+    # In case input is data.table::IDate need to convert to plain Date
+    # in order to placate vctrs type casting rules.
+    lubridate::as_date(x)
   } else if (lubridate::is.POSIXt(x)) {
     lubridate::as_date(x)
   } else if (is.character(x)) {
