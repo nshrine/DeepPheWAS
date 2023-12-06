@@ -99,9 +99,18 @@ task extracting_snps {
 		String variant_save_name
 	}
 
+	parameter_meta {
+		bgens : "stream"
+  }
+
 	command <<<
 		echo ~{sep="," bgis} &&
-		paste <(tr ',' '\n' <<< "~{sep=',' bgens}" | sort) <(tr ',', '\n' <<< "~{sep=',' sample_files}" | sort) | gawk 'BEGIN { OFS = ","; print "chromosome,genetic_file_location,psam_fam_sample_file_location" } { sub(".bgen", "", $1); print gensub(".+ukb22828_c(.+)_b0_v3", "\\1", "g", $1), $1, $2 }' > genetic_file_guide.csv &&
+		awk -F ',' 'BEGIN { OFS="," } NR == 1 { print "chromosome", "genetic_file_location", "psam_fam_sample_file_location"; next } !($1 in chr) { print $1, "chr"$1, "chr"$1".sample"; chr[$1] }' ~{snp_list} > genetic_file_guide.csv &&
+		awk -F ',' 'NR > 1 { print $1, $2, $3 }' genetic_file_guide.csv | while read i b s; do
+			cp `tr ',' '\n' <<< "~{sep=',' bgens}" | grep _c${i}_` ${b}.bgen
+			cp `tr ',' '\n' <<< "~{sep=',' bgis}" | grep _c${i}_` ${b}.bgen.bgi
+			cp `tr ',' '\n' <<< "~{sep=',' sample_files}" | grep _c${i}_` ${b}.sample
+		done &&
 		Rscript `Rscript -e 'cat(system.file("extdata/scripts/association_testing","02_extracting_snps.R", package = "DeepPheWAS"))'` \
 		--SNP_list ~{snp_list} \
 		--genetic_file_guide genetic_file_guide.csv \
