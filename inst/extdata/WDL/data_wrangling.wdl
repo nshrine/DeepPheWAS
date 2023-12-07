@@ -67,7 +67,7 @@ task data_preparation {
 		File combined_sex = "combined_sex"
 		File? control_exclusions = "control_exclusions"
 		File? related_callrate = "related_callrate"
-        File GP_P = "GP_P_edit.txt.gz"
+		File GP_P = "GP_P_edit.txt.gz"
 		File GP_C = "GP_C_edit.txt.gz"
 		File? GP_ID = "GP_C_ID.txt.gz"
 		File? control_populations = "control_populations"

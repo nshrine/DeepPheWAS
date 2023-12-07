@@ -39,8 +39,8 @@ workflow association_testing {
 	call tables_graphs {
 		input:
 			results_file = PLINK_association_testing.results,
-        	analysis_name = analysis_name,
-        	snp_list = snp_list,
+			analysis_name = analysis_name,
+			snp_list = snp_list,
 			phewas_manifest = phewas_manifest
 	}
 

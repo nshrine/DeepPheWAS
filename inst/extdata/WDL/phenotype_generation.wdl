@@ -6,8 +6,9 @@ import "phenotype_creation.wdl"
 workflow phenotype_generation {
 
 	input {
-        File? phewas_manifest = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PheWAS_manifest.csv"
-		File? code_list
+		File? phewas_manifest = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PheWAS_manifest.csv"
+		File? concept_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/concept_codes.zip"
+		File? PQP_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PQP_codes.zip"
 	}
 
 	call data_wrangling.minimum_data {
@@ -25,39 +26,39 @@ workflow phenotype_generation {
 			control_exclusions = data_preparation.control_exclusions
 	}
 
-    call phenotype_creation.data_field_phenotypes {
-        input:
-            min_data = minimum_data.out,
-            phewas_manifest = phewas_manifest
+	call phenotype_creation.data_field_phenotypes {
+		input:
+			min_data = minimum_data.out,
+			phewas_manifest = phewas_manifest
 	}
 
-    call phenotype_creation.creating_concepts {
-        input:
-            GPP = data_preparation.GP_P,
-            health_data = data_preparation.health_records,
-            phewas_manifest = phewas_manifest,
-            code_list = code_list
-    }
+	call phenotype_creation.creating_concepts {
+		input:
+			GPP = data_preparation.GP_P,
+			health_data = data_preparation.health_records,
+			phewas_manifest = phewas_manifest,
+			code_list = concept_codes
+	}
 
-    call phenotype_creation.primary_care_quantitative_phenotypes {
-        input:
-            GPC = data_preparation.GP_C,
-            DOB = data_preparation.DOB,
-            phewas_manifest = phewas_manifest,
-            code_list = code_list
-    }
+	call phenotype_creation.primary_care_quantitative_phenotypes {
+		input:
+			GPC = data_preparation.GP_C,
+			DOB = data_preparation.DOB,
+			phewas_manifest = phewas_manifest,
+			code_list = PQP_codes
+	}
 
-    call phenotype_creation.formula_phenotypes {
-        input:
-            min_data = minimum_data.out,
-            data_field_phenotypes = data_field_phenotypes.out,
-            sex_info = data_preparation.combined_sex,
-            phewas_manifest = phewas_manifest
-    }
+	call phenotype_creation.formula_phenotypes {
+		input:
+			min_data = minimum_data.out,
+			data_field_phenotypes = data_field_phenotypes.out,
+			sex_info = data_preparation.combined_sex,
+			phewas_manifest = phewas_manifest
+	}
 
-    call phenotype_creation.composite_phenotypes {
-        input:
-            phecode_file = phecode_generation.phecode_file,
+	call phenotype_creation.composite_phenotypes {
+		input:
+			phecode_file = phecode_generation.phecode_file,
 			range_ID_file = phecode_generation.range_ID_file,
 			concept_file = creating_concepts.concept_file,
 			all_dates_file = creating_concepts.all_dates_file,
