@@ -129,6 +129,7 @@ task extracting_snps {
 	runtime {
 		cpu: 1
 		memory: "24 GB"
+		disks: 300
 	}
 }	
 

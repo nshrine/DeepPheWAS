@@ -44,7 +44,7 @@ SR_data_out <-  function(a,b,c,d,e,f) {
                       (lubridate::round_date)(unit="day") %>%
                       parse_date_if_needed(),
                   date_of_visit = parse_date_if_needed(.data$date_of_visit),
-                  date = dplyr::coalesce(.data$date_of_dx,.data$date_of_visit),
+                  date = dplyr::coalesce(date_of_dx, date_of_visit),
                   source=e,
                   code=as.character(.data$code)) %>%
     dplyr::select(.data$eid,.data$code,.data$date,.data$source)
@@ -591,3 +591,4 @@ parse_date_if_needed <- function(x, orders = c("ymd", "dmy")) {
     stop("Don't know how to parse <", class(x)[1], "> to date.")
   }
 }
+
