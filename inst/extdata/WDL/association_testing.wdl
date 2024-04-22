@@ -3,22 +3,13 @@ version 1.0
 workflow association_testing {
 
 	input {
-		Boolean prepare_phenotypes = false
-		File? phewas_manifest = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PheWAS_manifest.csv"
+		File? phewas_manifest
 		File snp_list
 		String analysis_name
-		File? covariates = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/covariates_plink"
+		File? covariates
 		File? phenotype_inclusion_file
 	}
 
-	if (prepare_phenotypes) {
-		call phenotype_preparation {
-			input:
-				phewas_manifest = phewas_manifest
-		}
-
-	}
-	
 	call extracting_snps {
 		input:
 			snp_list = snp_list,
@@ -54,11 +45,11 @@ workflow association_testing {
 task phenotype_preparation {
 
 	input {
-		Array[File]+ phenotype_files = [ "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/composite_phenotypes.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/concepts.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/all_dates.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/range_ID.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phecodes.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/PQP.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/formula_phenotypes.RDS", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/data_field_phenotypes.RDS" ]
-		File groupings = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/ancestry_panUKB"
-		String phenotype_filtered_save_name = "IVNT_RR_N_filtered_neuro_PanUKB_ancestry"
+		Array[File]+ phenotype_files
+		File groupings
+		String phenotype_filtered_save_name
 		Boolean relate_remove = true
-		File? kinship_file = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/related_callrate"
+		File? kinship_file
 		Boolean IVNT = true
 		String stats_save = "IVNT_RR_N_filtered_neuro_PanUKB_ancestry_stats"
 		File? phewas_manifest
@@ -92,9 +83,9 @@ task phenotype_preparation {
 task extracting_snps {
 
 	input {
-		Array[File]+ bgens = ["dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c10_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c6_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c17_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c9_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c14_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c21_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c4_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cXY_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c11_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c20_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c19_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c7_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c12_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c22_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c18_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c5_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c1_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c15_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c8_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c2_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c16_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cX_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c3_b0_v3.bgen","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c13_b0_v3.bgen"]
-		Array[File]+ bgis = ["dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c10_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c6_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c17_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c9_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c14_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c21_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c4_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cXY_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c11_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c20_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c19_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c7_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c12_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c22_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c18_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c5_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c1_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c15_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c8_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c2_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c16_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cX_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c3_b0_v3.bgen.bgi","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c13_b0_v3.bgen.bgi"]
-		Array[File]+ sample_files = ["dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c10_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c6_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c2_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c11_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c8_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c15_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c4_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c12_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c5_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c13_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cXY_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c17_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c18_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c14_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c7_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c19_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c1_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c9_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c16_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_cX_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c21_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c22_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c3_b0_v3.sample","dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/Bulk/Imputation/UKB%20imputation%20from%20genotype/ukb22828_c20_b0_v3.sample"]
+		Array[File]+ bgens
+		Array[File]+ bgis
+		Array[File]+ sample_files
 		File snp_list
 		String variant_save_name
 	}
@@ -136,7 +127,7 @@ task extracting_snps {
 task PLINK_association_testing {
 
 	input {
-		Array[File]+ phenotypes = [ "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/AFR_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/AMR_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/CSA_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/EAS_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/EUR_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz", "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/phenotypes/MID_IVNT_RR_N_filtered_neuro_PanUKB_ancestry.gz" ]
+		Array[File]+ phenotypes
 		File pgen
 		File psam
 		File pvar

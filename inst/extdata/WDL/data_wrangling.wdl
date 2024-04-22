@@ -3,8 +3,8 @@ version 1.0
 task minimum_data {
 
 	input {
-		Array[File]+ files = ["dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/ukb_test_tab.csv"]
-		File? exclusions = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/exclusions.csv"
+		Array[File]+ files
+		File? exclusions
 		String save_loc = "."
 	}
 
@@ -36,14 +36,14 @@ task data_preparation {
 	input {
 		String save_loc = "."
 		File min_data
-		File GPC = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/gp_clinical.tsv"
-		File GPP = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/gp_scripts.tsv"
-		File hesin_diag = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/hesin_diag.tsv"
-		File HESIN = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/hesin.tsv"
-		File hesin_opr = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/hesin_oper.tsv"
-		File death_cause = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/death_cause.tsv"
-		File death = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/death.tsv"
-		File? king_coef = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/ukb43027_rel_s488264.dat"
+		File GPC
+		File GPP
+		File hesin_diag
+		File HESIN
+		File hesin_opr
+		File death_cause
+		File death
+		File? king_coef
 	}
 
 	command <<<

@@ -6,9 +6,9 @@ import "phenotype_creation.wdl"
 workflow phenotype_generation {
 
 	input {
-		File? phewas_manifest = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PheWAS_manifest.csv"
-		File? concept_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/concept_codes.zip"
-		File? PQP_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PQP_codes.zip"
+		File? phewas_manifest
+		File? concept_codes
+		File? PQP_codes
 		File? composite_phenotype_map_overide
 	}
 
