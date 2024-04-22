@@ -9,6 +9,7 @@ workflow phenotype_generation {
 		File? phewas_manifest = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PheWAS_manifest.csv"
 		File? concept_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/concept_codes.zip"
 		File? PQP_codes = "dx://project-GJbvyPjJy3Gy01jz4x8bXzgv:/deep_phewas/inputs/PQP_codes.zip"
+		File? composite_phenotype_map_overide
 	}
 
 	call data_wrangling.minimum_data {
@@ -65,7 +66,8 @@ workflow phenotype_generation {
 			data_field_file = data_field_phenotypes.out,
 			PQP_file = primary_care_quantitative_phenotypes.out,
 			formula_file = formula_phenotypes.out,
-			control_populations = data_preparation.control_populations
+			control_populations = data_preparation.control_populations,
+			composite_phenotype_map_overide = composite_phenotype_map_overide
 	}
 
 	output {
