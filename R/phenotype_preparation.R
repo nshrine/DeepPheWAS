@@ -559,8 +559,11 @@ IVNT_transformation <- function(x,y,PheWAS_manifest,age_of_onset_phenotypes,age_
     dplyr::filter(.data$PheWAS_ID=={{name}}) %>%
     dplyr::select(.data$transformation) %>%
     dplyr::pull()
-}
-  if (type == "IVNT") {
+  }
+  
+  if (is.na(type)) {
+    return(x)
+  } else if (type == "IVNT") {
 
     pheno <- x %>%
       dplyr::rename(any_code=2)
